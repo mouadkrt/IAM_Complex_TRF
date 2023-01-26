@@ -4,7 +4,7 @@
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <route id="_route1">
             <from id="_from1" uri="netty4-http:http:0.0.0.0:8086/"/>
-            <to id="_to1" uri="xquery:myTransform.xquery"/>
+            <to id="_to1" uri="xquery:Receipt_Transfer_Header_Cleaned.Xquery"/>
         </route>
     </camelContext>
 </beans>

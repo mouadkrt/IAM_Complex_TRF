@@ -27,4 +27,5 @@ declare function xf:Header($wSReceiptTransferRequest as element(ns0:WSReceiptTra
 
 declare variable $wSReceiptTransferRequest as element(ns0:WSReceiptTransferRequest) external;
 
+wSReceiptTransferRequest="<test>mouad</test>";
 xf:Header($wSReceiptTransferRequest)

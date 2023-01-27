@@ -1,9 +1,14 @@
 # Muis notes :
 Connect to an OCP cluster from codeReady studio, using the Windows>Show View>Other>OPC Apps menu    
 Then run your project with following goals  
-mvn clean install  
+	mvn clean install
 then  
-mvn oc:build oc:resource oc:apply -Popenshift  
+	mvn oc:build oc:resource oc:apply -Popenshift  
+
+or run in localhost :
+    mvn spring-boot:run
+	
+	
 # Spring Boot Camel XML QuickStart
 
 This example demonstrates how to configure Camel routes in Spring Boot via

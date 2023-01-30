@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext id="cxfrs-cb0d9916-8bf7-4d44-ab6e-03ecad9f15bf" xmlns="http://camel.apache.org/schema/spring">
+
+        <dataFormats>
+            <xmljson id="xmljson"/>
+        </dataFormats>
+        
+        <restConfiguration component="jetty" host="localhost" port="8081" bindingMode="json">
+        </restConfiguration>
+
+        <rest id="id-b59eac60-d0e0-4c4b-8916-573d2fc8623a" path="/jaxrs">
+
+          <get id="id-d7a0402d-433a-47e4-b99e-7da9e4fba410" uri="/receipttransferoperation/{arg0}" 
+            type=".WSReceiptTransferRequest"
+            outType=".WSReceiptTransferReply" 
+            >
+            <to uri="direct:WSReceiptTransferOperation"/>
+          </get>
+        </rest>
+
+        <route id="WSReceiptTransferOperation">
+            <from uri="direct:WSReceiptTransferOperation" />
+            <log loggingLevel="INFO" message="WSReceiptTransferOperation"/>
+            <to uri="cxf://https://10.96.16.10:7022/IAMSAPReceiptTransferExport_V1/IAMSAPReceiptTransferExport_PS_V1?serviceClass=.WSReceiptTransferPortType&amp;defaultOperationName=WSReceiptTransferOperation"/>
+            <setHeader headerName="Content-Type">
+               <constant>application/json</constant>
+            </setHeader>
+            <setBody>
+                <simple>${body[0]}</simple>
+            </setBody>
+        </route>
+        
+    </camelContext>
+
+</beans>

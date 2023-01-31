@@ -1,18 +1,3 @@
-/**
- *  Copyright 2005-2021 Red Hat, Inc.
- *
- *  Red Hat licenses this file to you under the Apache License, version
- *  2.0 (the "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- *  implied.  See the License for the specific language governing
- *  permissions and limitations under the License.
- */
 package org.mycompany;
 
 import org.springframework.boot.SpringApplication;
@@ -24,8 +9,8 @@ import org.apache.camel.builder.RouteBuilder;
  * A spring-boot application that includes a Camel route builder to setup the Camel routes
  */
 @SpringBootApplication
-@ImportResource({"classpath:spring/camel-context.xml"})
-public class Application {
+//@ImportResource({"classpath:spring/camel-context.xml"})
+public class Application extends RouteBuilder {
 
     // must have a main method spring-boot can run
     public static void main(String[] args) {
@@ -34,10 +19,10 @@ public class Application {
 
     @Override
     public void configure() {
-        // populate the message queue with some messages
         from("netty4-http:http:0.0.0.0:8086")
-        .process(new MyProcessor());
-       // .to("xquery:Receipt_Transfer_Header_Cleaned.Xquery");
+        .convertBodyTo(String.class)
+        .process(new MyProcessor())
+       .to("xquery:Receipt_Transfer_Header_Cleaned.Xquery");
     }
 
 }

@@ -1,20 +1,22 @@
 xquery version "1.0";
+(:: pragma bea:global-element-parameter parameter="$wSReceiptTransferRequest" element="ns0:WSReceiptTransferRequest" location="../Wsdl/IAMSAPReceiptTransferExport.wsdl" ::)
+(:: pragma bea:global-element-return element="ns1:ibsinfo" location="../Wsdl/IAMSAPReceiptTransferExport_Adapter_WS_V1.0.wsdl" ::)
 
 declare namespace ns1 = "urn:schemas-iwaysoftware-com:iwse";
 declare namespace ns0 = "urn:Ariba:Buyer:vsap";
 declare namespace xf = "http://tempuri.org/IAMSAPReceiptTransferExport_V1/Transformations/Header/";
 
-(: declare variable $in.headers.foo external; :)
-(: declare variable $in.body as element(ns0:WSReceiptTransferRequest) external; :)
- declare variable $in.body as xs:string external; 
-declare variable $in.headers.key1 as xs:string external; 
-
-
-declare function xf:muis($body as xs:string)  {
-    <all>
-     <mouad>static text </mouad>
-     <you>{$body}</you>
-    </all>
+declare function xf:Header($wSReceiptTransferRequest as document-node())     as element(ns1:ibsinfo) {
+        <ns1:ibsinfo>
+            <ns1:service>IAMSAPReceiptTransferExport_V1</ns1:service>
+            <ns1:method>Z_ARIBA_GR_TRANSFER</ns1:method>
+            <ns1:license>test</ns1:license>
+            <pass>{$wSReceiptTransferRequest/WSReceiptTransferRequest/Receipt_ReceiptTransferHeaderDetails_Item/item[1]/Login/text()}</pass>
+        </ns1:ibsinfo>
 };
 
-xf:muis($in.body)
+(: declare variable $wSReceiptTransferRequest as document-node() := doc("wSReceiptTransferRequest.xml"); :)
+declare variable $in.body as xs:string external; 
+declare variable $wSReceiptTransferRequest as document-node() := fn:parse-xml($in.body); 
+
+xf:Header($wSReceiptTransferRequest)

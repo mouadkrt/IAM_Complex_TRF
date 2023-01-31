@@ -21,7 +21,7 @@ public class Application extends RouteBuilder {
     public void configure() {
         from("netty4-http:http:0.0.0.0:8086")
         .convertBodyTo(String.class)
-        .process(new MyProcessor())
+        //.process(new MyProcessor())
        .to("xquery:Receipt_Transfer_Header_Cleaned.Xquery");
     }
 

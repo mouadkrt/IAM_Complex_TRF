@@ -43,9 +43,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.jolokia</groupId>
-      <artifactId>jolokia-core</artifactId>
-    </dependency>
+		<groupId>org.jolokia</groupId>
+		<artifactId>jolokia-core</artifactId>
+	</dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-undertow</artifactId>
@@ -65,37 +65,29 @@
       <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jaxb</artifactId>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-soap</artifactId>
+        <version>3.20.1</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-dozer-starter</artifactId>
-      <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-jaxb</artifactId>
+        <version>3.20.1</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-cxf</artifactId>
-      <version>2.7.3</version>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-jackson</artifactId>
+        <version>3.6.0</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jetty</artifactId>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-jaxb-starter</artifactId>
+        <version>2.23.1</version>
     </dependency>
     <dependency>
-      <groupId>org.jboss.spec.javax.ws.rs</groupId>
-      <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-      <version>1.0.0.Final-redhat-1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jackson</artifactId>
-      <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-cxf</artifactId>
-      <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-cxf</artifactId>
+        <version>3.17.0</version>
     </dependency>
   </dependencies>
   <repositories>
@@ -116,6 +108,7 @@
       <plugin>
         <groupId>org.eclipse.jkube</groupId>
         <artifactId>openshift-maven-plugin</artifactId>
+        <version>1.10.1</version>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

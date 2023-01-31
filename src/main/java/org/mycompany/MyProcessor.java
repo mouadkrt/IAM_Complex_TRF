@@ -34,8 +34,8 @@ public class MyProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         // Get some HTTP Header with key key1 :
-            /*String val1 = exchange.getIn().getHeader("key1", String.class);
-            System.out.println(val1);*/
+            String val1 = exchange.getIn().getHeader("key1", String.class);
+            System.out.println(val1);
 
         // Get the HTTP Body as String :
             /*String body = exchange.getIn().getBody(String.class);

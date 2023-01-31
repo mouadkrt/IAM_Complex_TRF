@@ -11,7 +11,7 @@ declare function xf:Header($wSReceiptTransferRequest as document-node())     as 
             <ns1:service>IAMSAPReceiptTransferExport_V1</ns1:service>
             <ns1:method>Z_ARIBA_GR_TRANSFER</ns1:method>
             <ns1:license>test</ns1:license>
-            <pass>{$wSReceiptTransferRequest/WSReceiptTransferRequest/Receipt_ReceiptTransferHeaderDetails_Item/item[1]/Login/text()}</pass>
+            <pass>{$wSReceiptTransferRequest//*[name()='WSReceiptTransferRequest']/*[name()='Receipt_ReceiptTransferHeaderDetails_Item']/*[name()='item'[1]]/*[name()='Login']/text()}</pass>
         </ns1:ibsinfo>
 };
 

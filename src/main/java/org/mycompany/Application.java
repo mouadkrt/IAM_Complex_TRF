@@ -1,73 +1,43 @@
+/**
+ *  Copyright 2005-2021 Red Hat, Inc.
+ *
+ *  Red Hat licenses this file to you under the Apache License, version
+ *  2.0 (the "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied.  See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
 package org.mycompany;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
-
-//import ariba.buyer.vsap.*;
-//import com.cleverbuilder.bookservice.GetAllBooks;
-
-/*import javax.xml.namespace.QName;
-import org.apache.camel.dataformat.soap.name.*;
-import org.apache.camel.model.dataformat.SoapJaxbDataFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;*/
 import org.apache.camel.builder.RouteBuilder;
-/*import org.apache.camel.builder.xml.Namespaces;
-import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.converter.jaxb.JaxbDataFormat;*/
 
+/**
+ * A spring-boot application that includes a Camel route builder to setup the Camel routes
+ */
 @SpringBootApplication
 @ImportResource({"classpath:spring/camel-context.xml"})
-public class Application extends RouteBuilder {
+public class Application {
+
+    // must have a main method spring-boot can run
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Override
     public void configure() {
-        
-        //Logger LOGGER=LoggerFactory.getLogger(Application.class);
-
-       
-
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("ariba.buyer.vsap", QNS);
-        
-       /*  JaxbDataFormat jdb = new JaxbDataFormat();
-        jdb.setContextPath("ariba.buyer.vsap");
-        LOGGER.info(">>> DataFormatName: " +jdb.getDataFormatName());*/
-
-       
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("ariba.buyer.vsa", new ServiceInterfaceStrategy(WSReceiptTransferRequest.class, false));
-
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("ariba.buyer.vsa", new TypeNameStrategy());
-
-        //QName qName = new QName("urn:Ariba:Buyer:vsap","WSReceiptTransferRequest");
-        //QName qName = new QName("http://www.cleverbuilder.com/BookService/","GetAllBooks");
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("ariba.buyer.vsa.Headers:ariba.buyer.vsa.ObjectFactory:ariba.buyer.vsa.ReceiptErrorReceiptTransferErrorImport:ariba.buyer.vsa.ReceiptReceiptTransferHeaderDetails:ariba.buyer.vsa.ReceiptReceiptTransferLineDetails:ariba.buyer.vsa.ReceiptReceiptTransferResponse:ariba.buyer.vsa.WSReceiptTransfer:ariba.buyer.vsa.WSReceiptTransferPortType:ariba.buyer.vsa.WSReceiptTransferReply:ariba.buyer.vsa.WSReceiptTransferRequest", new QNameStrategy(qName));
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("com.cleverbuilder.bookservice", new QNameStrategy(qName));
-        //SoapJaxbDataFormat soapWSReceiptTransferRequest = new SoapJaxbDataFormat("com.cleverbuilder.bookservice.GetAllBooks", new ServiceInterfaceStrategy(GetAllBooks.class, false));
-        //JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();
-
-       // Namespaces ns0 = new Namespaces("", "urn:Ariba:Buyer:vsap");
+        // populate the message queue with some messages
         from("netty4-http:http:0.0.0.0:8086")
-        //.streamCaching()
-        //from("jetty:http://0.0.0.0:8123/foo")
-        //.process(new MyProcessor());
-        //.unmarshal().string("UTF-8")
-        //.convertBodyTo(String.class)
-        //.marshal(jaxbDataFormat)
-        //.unmarshal().serialization()
-        //.marshal(soapWSReceiptTransferRequest);
-        //.unmarshal(new JacksonDataFormat(WSReceiptTransferRequest.class))
-        //.log("Received : ${body}")
-        //.to("xquery:Receipt_Transfer_Header_Cleaned.Xquery?runLoggingLevel=TRACE");
-        //.unmarshal(soapWSReceiptTransferRequest)
-       // .unmarshal(jdb)
-        //.transform().xquery("resource:classpath:Receipt_Transfer_Header_Cleaned.Xquery");
-        //.setBody(body().append(" World!"));
-        //.transform().xquery("resource:classpath:Receipt_Transfer_Header_Cleaned.Xquery");
-        .to("stream:out");
+        .process(new MyProcessor());
+       // .to("xquery:Receipt_Transfer_Header_Cleaned.Xquery");
     }
 
 }

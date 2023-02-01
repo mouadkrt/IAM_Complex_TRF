@@ -24,7 +24,6 @@ declare function xf:Header($wSReceiptTransferRequest as document-node())     as 
 		</ns1:ibsinfo>
 };
 
-(: declare variable $wSReceiptTransferRequest as document-node() := doc("wSReceiptTransferRequest.xml"); :)
 declare variable $in.body as xs:string external; 
 declare variable $wSReceiptTransferRequest as document-node() := fn:parse-xml($in.body); 
 

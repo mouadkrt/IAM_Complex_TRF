@@ -1,7 +1,6 @@
-package org.mycompany;
+package ma.munisys;
 
 import org.apache.camel.Processor;
-import org.apache.cxf.message.Exchange;
 
 public class MyProcessor implements Processor {
 

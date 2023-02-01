@@ -1,8 +1,8 @@
-package org.mycompany;
+package ma.munisys;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
+//import org.springframework.context.annotation.ImportResource;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -22,7 +22,7 @@ public class Application extends RouteBuilder {
         from("netty4-http:http:0.0.0.0:8086")
         .convertBodyTo(String.class)
         //.process(new MyProcessor())
-       .to("xquery:Receipt_Transfer_Header_Cleaned.Xquery");
+       .to("xquery:Receipt_Transfer_Header.Xquery");
     }
 
 }

@@ -4,20 +4,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.apache.camel.Exchange;
-//import org.springframework.context.annotation.ImportResource;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
+
+//import org.springframework.context.annotation.ImportResource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * A spring-boot application that includes a Camel route builder to setup the Camel routes
- */
 @SpringBootApplication
 //@ImportResource({"classpath:spring/camel-context.xml"})
 public class Application extends RouteBuilder {
 
-    // must have a main method spring-boot can run
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -27,38 +25,28 @@ public class Application extends RouteBuilder {
 
         from("netty4-http:http:0.0.0.0:8086")
         .routeId("muis_route1")
-        //.multicast(new muisAddSoapHeader(), true)
         .multicast(new muisAddSoapHeader())
         .aggregationStrategyMethodAllowNull()
         .parallelProcessing()
         .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
         .end();
+        //.setHeader("CamelHttpMethod", constant("POST"))
+        //.to("netty4-http:http:localhost:8090");
         
-
             from("direct:muis_trans_req_header")
             .routeId("muis_route1.1")
             .log("muis_route1.1 is being invoked ...")
             .convertBodyTo(String.class)
             //.delayer(5000)
             .to("xquery:Receipt_Transfer_Header.Xquery")
-            //.transform(constant("DATA_FROM_PATH_1"))
             .end();
-            //.to("direct:muis_trans_req_header_done");
 
             from("direct:muis_trans_req_body")
             .routeId("muis_route1.2")
             .log("muis_route1.2 is being invoked ...")
             .convertBodyTo(String.class)
-            .to("xquery:Receipt_Transfer_Header2.Xquery")
-            //.transform(constant("DATA_FROM_PATH_2"))
+            .to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
             .end();
-            //.to("direct:muis_trans_req_body_done");
-
-        
-        /*from("direct:muis_trans_req_body_done")
-        .routeId("muis_route2")
-        .log("muis_route2 is being invoked ...")
-        .pollEnrich("direct:muis_trans_req_header_done", 5000, new muisAddSoapHeader()); */
 
         //.process(new MyProcessor());
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");
@@ -76,20 +64,26 @@ class muisAddSoapHeader implements AggregationStrategy  {
             return newExchange;
         }
  
-        LOGGER.info("Inside aggregator oldExchange : " + oldExchange.getIn().getBody(String.class));
-
         String oldBody = oldExchange.getIn().getBody(String.class);
+        LOGGER.info("Inside aggregator oldExchange : " + oldBody);
 
-        LOGGER.info("Inside aggregator newExchange : " + newExchange.getIn().getBody(String.class));
-        
         String newBody = newExchange.getIn().getBody(String.class);
-
-       
-
-        String mergedStr = oldBody + " :muis: " + newBody;
+        LOGGER.info("Inside aggregator newExchange : " + newBody);
         
+        String mergedStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+                                "<soapenv:Header>" +
+                                    oldBody +
+                                "</soapenv:Header>" +
+                                "<soap:Body xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+                                newBody +
+                                "</soap:Body>" +
+                            "</soap:Envelope>";
+                            
+        
+
         newExchange.getIn().setBody(mergedStr);
-                
+
+        LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody());        
         return newExchange;
     }
 

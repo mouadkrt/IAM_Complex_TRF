@@ -32,8 +32,8 @@ public class Application extends RouteBuilder {
         .end()
         // Uncomment the two following line to let this fuse app proxy the request to some backend
         // To be commented if this fuse app is to be used as a camel-proxy policy to let 3scale use it as a helper to transformer the request before handling it to the backend
-            //.setHeader("CamelHttpMethod", constant("POST"))
-            //.to("netty4-http:http:localhost:8090")
+            .setHeader("CamelHttpMethod", constant("POST"))
+            .to("netty4-http:http:130.24.31.210:8090")
         // Transformaing the backend reply
             //.to("Receipt_Transfer_Transformation_Response.Xquery")
             .process(new MyProcessor()); 

@@ -29,9 +29,11 @@ public class Application extends RouteBuilder {
         .aggregationStrategyMethodAllowNull()
         .parallelProcessing()
         .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
-        .end();
-        //.setHeader("CamelHttpMethod", constant("POST"))
-        //.to("netty4-http:http:localhost:8090");
+        .end()
+        .setHeader("CamelHttpMethod", constant("POST"))
+        .to("netty4-http:http:localhost:8090")
+        
+        .process(new MyProcessor());
         
             from("direct:muis_trans_req_header")
             .routeId("muis_route1.1")
@@ -77,7 +79,7 @@ class muisAddSoapHeader implements AggregationStrategy  {
                                 "<soap:Body xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
                                 newBody +
                                 "</soap:Body>" +
-                            "</soap:Envelope>";
+                            "</soapenv:Envelope>";
                             
         
 

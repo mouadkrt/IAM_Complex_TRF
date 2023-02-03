@@ -29,11 +29,10 @@ public class Application extends RouteBuilder {
         .aggregationStrategyMethodAllowNull()
         .parallelProcessing()
         .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
-        .end()
-        .setHeader("CamelHttpMethod", constant("POST"))
+        .end();
+        /*  .setHeader("CamelHttpMethod", constant("POST"))
         .to("netty4-http:http:localhost:8090")
-        
-        .process(new MyProcessor());
+        .process(new MyProcessor()); */
         
             from("direct:muis_trans_req_header")
             .routeId("muis_route1.1")

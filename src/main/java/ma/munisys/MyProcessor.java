@@ -8,7 +8,7 @@ public class MyProcessor implements Processor {
     public void process(org.apache.camel.Exchange exchange) throws Exception {
         String payload = exchange.getIn().getBody(String.class);
         // System.out.println(payload);
-        exchange.getOut().setBody("<replyy_transformed>" + payload + "</replyy_transformed>");
+        exchange.getOut().setBody("<reply2_transformed>" + payload + "</reply2_transformed>");
     }
 
 }

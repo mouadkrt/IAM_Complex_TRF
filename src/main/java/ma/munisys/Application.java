@@ -24,34 +24,36 @@ public class Application extends RouteBuilder {
     public void configure() {
 
         from("netty4-http:http:0.0.0.0:8086")
-        .routeId("muis_route1")
-        .multicast(new muisAddSoapHeader())
-        .aggregationStrategyMethodAllowNull()
-        .parallelProcessing()
-        .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
+            .routeId("muis_route1")
+            .multicast(new muisAddSoapHeader())
+            .aggregationStrategyMethodAllowNull()
+            .parallelProcessing()
+            .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
         .end()
-        /*  .setHeader("CamelHttpMethod", constant("POST"))
-        .to("netty4-http:http:localhost:8090")*/
-        .process(new MyProcessor()); 
+        // Uncomment the two following line to let this fuse app proxy the request to some backend
+        // To be commented if this fuse app is to be used as a camel-proxy policy to let 3scale use it as a helper to transformer the request before handling it to the backend
+            //.setHeader("CamelHttpMethod", constant("POST"))
+            //.to("netty4-http:http:localhost:8090")
+        // Transformaing the backend reply
+            //.to("Receipt_Transfer_Transformation_Response.Xquery")
+            .process(new MyProcessor()); 
         
-            from("direct:muis_trans_req_header")
-            .routeId("muis_route1.1")
-            .log("muis_route1.1 is being invoked ...")
-            .convertBodyTo(String.class)
-            //.delayer(5000)
-            .to("xquery:Receipt_Transfer_Header.Xquery")
-            .end();
+                from("direct:muis_trans_req_header")
+                    .routeId("muis_route1.1")
+                    .log("muis_route1.1 is being invoked ...")
+                    .convertBodyTo(String.class)
+                    //.delayer(5000)
+                    .to("xquery:Receipt_Transfer_Header.Xquery")
+                .end();
 
-            from("direct:muis_trans_req_body")
-            .routeId("muis_route1.2")
-            .log("muis_route1.2 is being invoked ...")
-            .convertBodyTo(String.class)
-            .to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
-            .end();
+                from("direct:muis_trans_req_body")
+                    .routeId("muis_route1.2")
+                    .log("muis_route1.2 is being invoked ...")
+                    .convertBodyTo(String.class)
+                    .to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
+                .end();
 
-        //.process(new MyProcessor());
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");
-
     }
 }
 

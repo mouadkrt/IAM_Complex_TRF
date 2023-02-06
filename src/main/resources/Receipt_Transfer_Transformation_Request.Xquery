@@ -10,8 +10,8 @@ declare function xf:Receipt_Transfer_Transformation_Request($wSReceiptTransferRe
     as element(ns1:Z_ARIBA_GR_TRANSFER) {
         <ns1:Z_ARIBA_GR_TRANSFER>
             <ns1:Z_ARIBA_GR_TRANSFER>
-                <ns1:PARTITION>{ data($wSReceiptTransferRequest/@partition) }</ns1:PARTITION>
-                <ns1:VARIANT>{ data($wSReceiptTransferRequest/@variant) }</ns1:VARIANT>
+                <ns1:PARTITION>{ data($wSReceiptTransferRequest//@partition) }</ns1:PARTITION>
+                <ns1:VARIANT>{ data($wSReceiptTransferRequest//@variant) }</ns1:VARIANT>
                 <ns1:GR_ITEM>
                     {
                         for $item in $wSReceiptTransferRequest//*[name()='Receipt_ReceiptTransferLineDetails_Item']/*[name()='item'[1]]/*[name()='ReceiptItems']/*[name()='item']

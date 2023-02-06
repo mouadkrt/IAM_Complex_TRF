@@ -44,6 +44,7 @@ public class Application extends RouteBuilder {
                 + "${headers." + Exchange.HTTP_PATH + "}")
             .log(LoggingLevel.INFO, "Backend response in.headers: \n${in.headers}")
             .log(LoggingLevel.INFO, "Backend response body: \n${body}")
+            .convertBodyTo(String.class)
             .to("xquery:Receipt_Transfer_Transformation_Response.Xquery");
         
                 from("direct:muis_trans_req_header")

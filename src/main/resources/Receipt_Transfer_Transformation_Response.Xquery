@@ -13,7 +13,7 @@ declare function xf:Receipt_Transfer_Transformation_Response($z_ARIBA_GR_TRANSFE
                 <ns0:item>
                     <ns0:ReceiptItems>
                         {
-                            for $item in $z_ARIBA_GR_TRANSFERResponse/*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='GR_ITEM']/*[name()='item']
+                            for $item in $z_ARIBA_GR_TRANSFERResponse//*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='GR_ITEM']/*[name()='item']
                             return
                                 <ns0:item>
                                     <ns0:IAMSAPLiberateStockDocument>{ fn:concat(fn:concat(data($item/*[name()='MJAHR_A']),"-"), data($item/*[name()='MBLNR_A'])) }</ns0:IAMSAPLiberateStockDocument>
@@ -22,12 +22,12 @@ declare function xf:Receipt_Transfer_Transformation_Response($z_ARIBA_GR_TRANSFE
                                 </ns0:item>
                         }
                     </ns0:ReceiptItems>
-                    <ns0:UniqueName>{ data($z_ARIBA_GR_TRANSFERResponse/*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='GR_ITEM']/*[name()='item'[1]]/*[name()='ARIBA_GRNO']) }</ns0:UniqueName>
+                    <ns0:UniqueName>{ data($z_ARIBA_GR_TRANSFERResponse//*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='GR_ITEM']/*[name()='item'[1]]/*[name()='ARIBA_GRNO']) }</ns0:UniqueName>
                 </ns0:item>
             </ns0:Receipt_ReceiptTransferResponse_Item>
             <ns0:ReceiptError_ReceiptTransferErrorImport_Item>
                 {
-                    for $item in $z_ARIBA_GR_TRANSFERResponse/*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='ERROR_MSG_TABLE']/*[name()='item']
+                    for $item in $z_ARIBA_GR_TRANSFERResponse//*[name()='Z_ARIBA_GR_TRANSFER.Response']/*[name()='ERROR_MSG_TABLE']/*[name()='item']
                     return
                         <ns0:item>
                             <ns0:Type>{ data($item/*[name()='TYPE']) }</ns0:Type>

@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
@@ -41,6 +42,7 @@ public class Application extends RouteBuilder {
                 + "${headers." + Exchange.HTTP_HOST + "}:"
                 + "${headers." + Exchange.HTTP_PORT + "}"
                 + "${headers." + Exchange.HTTP_PATH + "}")
+            .log(LoggingLevel.INFO, "${body}")
             .to("xquery:Receipt_Transfer_Transformation_Response.Xquery");
         
                 from("direct:muis_trans_req_header")

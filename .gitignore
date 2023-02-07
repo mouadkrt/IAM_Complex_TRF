@@ -1,6 +1,8 @@
 .settings
 .vscode
 target
+configuration/settings.xml
+.classpath
 src/main/resources/Receipt_Transfer_Header.Xquery
 src/main/resources/Receipt_Transfer_Transformation_Request.Xquery
 src/main/resources/Receipt_Transfer_Transformation_Response.Xquery

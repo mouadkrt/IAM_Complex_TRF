@@ -3,10 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ma.munisys</groupId>
-  <artifactId>camel-ose-springboot-xml</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <name>Fabric8 :: Quickstarts :: Spring-Boot :: Camel XML</name>
-  <description>Spring Boot example running a Camel route defined in XML</description>
+  <artifactId>Muis-Fuse-xQuery-transformation</artifactId>
+  <version>1.0.0</version>
+  <name>Spring-Boot :: Camel XML</name>
+  <description>This app is intented to be run as a pod on openShift, which should expose an internal cluster service to be used as a 3scale Camel Proxy policy, in order to handle api SOAP requests that should be transformed (Request header and body, Response body)</description>
   <properties>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

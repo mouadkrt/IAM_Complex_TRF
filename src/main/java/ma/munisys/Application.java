@@ -52,15 +52,14 @@ public class Application extends RouteBuilder {
                     .log("muis_route1.1 is being invoked ...")
                     .convertBodyTo(String.class)
                     //.delayer(5000)
-                    .to("xquery:Receipt_Transfer_Header.Xquery")
+                    .to("xquery:file:/tmp/Receipt_Transfer_Header/Receipt_Transfer_Header.Xquery")
                 .end();
 
                 from("direct:muis_trans_req_body")
                     .routeId("muis_route1.2")
                     .log("muis_route1.2 is being invoked ...")
                     .convertBodyTo(String.class)
-                    //.to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
-                    .to("xquery:file:/tmp/Receipt_Transfer_Header/Receipt_Transfer_Header.Xquery")
+                    .to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
                 .end();
 
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");

@@ -59,7 +59,8 @@ public class Application extends RouteBuilder {
                     .routeId("muis_route1.2")
                     .log("muis_route1.2 is being invoked ...")
                     .convertBodyTo(String.class)
-                    .to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
+                    //.to("xquery:Receipt_Transfer_Transformation_Request.Xquery")
+                    .to("xquery:file:/tmp/Receipt_Transfer_Header/Receipt_Transfer_Header.Xquery")
                 .end();
 
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");

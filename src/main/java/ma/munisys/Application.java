@@ -45,21 +45,24 @@ public class Application extends RouteBuilder {
             .convertBodyTo(String.class)
             .log(LoggingLevel.INFO, "Backend response in.headers: \n${in.headers}")
             .log(LoggingLevel.INFO, "Backend response body: \n${body}")
-            .to("xquery:file:/Transform_Response/Response.Xquery");
+            .to("xquery:file:/Transform/Response.Xquery");
+            //.to("xquery:Response.Xquery");
         
                 from("direct:muis_trans_req_header")
                     .routeId("muis_route1.1")
                     .log("muis_route1.1 is being invoked ...")
                     .convertBodyTo(String.class)
                     //.delayer(5000)
-                    .to("xquery:file:/Transform_Header/Header.Xquery")
+                    .to("xquery:file:/Transform/Header.Xquery")
+                    //.to("xquery:Header.Xquery")
                 .end();
 
                 from("direct:muis_trans_req_body")
                     .routeId("muis_route1.2")
                     .log("muis_route1.2 is being invoked ...")
                     .convertBodyTo(String.class)
-                    .to("xquery:file:/Transform_Request/Request.Xquery")
+                    .to("xquery:file:/Transform/Request.Xquery")
+                    //.to("xquery:Request.Xquery")
                 .end();
 
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");

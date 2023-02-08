@@ -27,12 +27,12 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
+   <!--  <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-spring-boot-starter</artifactId>
       <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
-    </dependency>
-    <dependency>
+    </dependency> -->
+  <!--   <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <exclusions>
@@ -41,19 +41,19 @@
           <artifactId>spring-boot-starter-tomcat</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-		<groupId>org.jolokia</groupId>
-		<artifactId>jolokia-core</artifactId>
-	</dependency>
-    <dependency>
+    </dependency> -->
+  <!--   <dependency>
+      <groupId>org.jolokia</groupId>
+      <artifactId>jolokia-core</artifactId>
+    </dependency> -->
+   <!--  <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-undertow</artifactId>
-    </dependency>
-    <dependency>
+    </dependency> -->
+   <!--  <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-netty4-http</artifactId>
@@ -64,36 +64,36 @@
       <artifactId>camel-saxon</artifactId>
       <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
     </dependency>
-    <dependency>
+    <!-- <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-soap</artifactId>
         <version>3.20.1</version>
-    </dependency>
-    <dependency>
+    </dependency> -->
+   <!--  <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-jaxb</artifactId>
         <version>3.20.1</version>
-    </dependency>
-    <dependency>
+    </dependency> -->
+    <!-- <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-jackson</artifactId>
         <version>3.6.0</version>
-    </dependency>
+    </dependency> -->
     <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-jaxb-starter</artifactId>
         <version>2.23.1</version>
     </dependency>
-    <dependency>
+   <!--  <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-cxf</artifactId>
         <version>3.17.0</version>
-    </dependency>
-     <dependency>
+    </dependency> -->
+    <!--  <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-core-xml</artifactId>
         <version>3.20.1</version>
-    </dependency>
+    </dependency> -->
   </dependencies>
   <repositories>
     <repository>
@@ -110,19 +110,19 @@
   <build>
     <defaultGoal>spring-boot:run</defaultGoal>
     <plugins>
-      <plugin>
+     <!--  <plugin>
         <groupId>org.eclipse.jkube</groupId>
         <artifactId>openshift-maven-plugin</artifactId>
         <version>1.10.1</version>
-      </plugin>
-      <plugin>
+      </plugin> -->
+      <!-- <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
-      </plugin>
+      </plugin> -->
       <plugin>
         <groupId>org.jboss.redhat-fuse</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -138,7 +138,7 @@
     </plugins>
   </build>
   <profiles>
-    <profile>
+    <!-- <profile>
       <id>openshift</id>
       <build>
         <plugins>
@@ -198,8 +198,8 @@
       <properties>
         <jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-rhel8:${docker.image.version}</jkube.generator.from>
       </properties>
-    </profile>
-    <profile>
+    </profile> -->
+   <!--  <profile>
       <id>java11</id>
       <activation>
         <jdk>[11,)</jdk>
@@ -207,6 +207,6 @@
       <properties>
         <jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-jdk11-rhel8:${docker.image.version}</jkube.generator.from>
       </properties>
-    </profile>
+    </profile> -->
   </profiles>
 </project>

@@ -7,3 +7,6 @@ src/main/resources/Receipt_Transfer_Header.Xquery
 src/main/resources/Receipt_Transfer_Transformation_Request.Xquery
 src/main/resources/Receipt_Transfer_Transformation_Response.Xquery
 .project
+src/main/resources/Header.Xquery
+src/main/resources/Request.Xquery
+src/main/resources/Response.Xquery

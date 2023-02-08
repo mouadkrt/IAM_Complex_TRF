@@ -5,8 +5,8 @@
   <groupId>ma.munisys</groupId>
   <artifactId>Muis-Fuse-xQuery-transformation</artifactId>
   <version>1.0.0</version>
-  <name>Spring-Boot :: Camel XML</name>
-  <description>This app is intented to be run as a pod on openShift, which should expose an internal cluster service to be used as a 3scale Camel Proxy policy, in order to handle api SOAP requests that should be transformed (Request header and body, Response body)</description>
+  <name>Munisys :: IAM :: RedHat FUSE :: Spring-Boot</name>
+  <description>This app is intented to be run as a pod on openShift, which should expose an internal OCP cluster service to be used as a 3scale Camel Proxy policy, in order to handle API  SOAP requests that should be transformed (Request header and body, and Response body)</description>
   <properties>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.jboss.redhat-fuse</groupId>
         <artifactId>fuse-springboot-bom</artifactId>
-        <version>7.11.1.fuse-sb2-7_11_1-00017-redhat-00002</version>
+        <version>${fuse.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -55,6 +55,10 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency> -->
     <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-netty4-http</artifactId>
       <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
@@ -64,6 +68,11 @@
       <artifactId>camel-saxon</artifactId>
       <version>2.23.2.fuse-7_11_1-00015-redhat-00002</version>
     </dependency>
+   <!--  <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-jaxb-starter</artifactId>
+        <version>2.25.4</version>
+    </dependency> -->
     <!-- <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-soap</artifactId>
@@ -79,11 +88,6 @@
         <artifactId>camel-jackson</artifactId>
         <version>3.6.0</version>
     </dependency> -->
-    <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-jaxb-starter</artifactId>
-        <version>2.23.1</version>
-    </dependency>
    <!--  <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-cxf</artifactId>
@@ -97,13 +101,53 @@
   </dependencies>
   <repositories>
     <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>fuse-public-repository</id>
+      <name>FuseSource Community Release Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/groups/public</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
       <id>red-hat-ga-repository</id>
+      <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>fuse-public-repository</id>
+      <name>FuseSource Community Release Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/groups/public</url>
+    </pluginRepository>
+    <pluginRepository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
       <id>red-hat-ga-repository</id>
+      <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
     </pluginRepository>
   </pluginRepositories>
@@ -138,7 +182,7 @@
     </plugins>
   </build>
   <profiles>
-    <!-- <profile>
+  <profile>
       <id>openshift</id>
       <build>
         <plugins>
@@ -169,8 +213,8 @@
                 <labels>
                   <pod>
                     <property>
-                      <name>com.company</name>
-                      <value>Red_Hat</value>
+                      <name>ma.muinsys</name>
+                      <value>Munisys</value>
                     </property>
                     <property>
                       <name>rht.prod_name</name>
@@ -198,7 +242,7 @@
       <properties>
         <jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-rhel8:${docker.image.version}</jkube.generator.from>
       </properties>
-    </profile> -->
+    </profile>
    <!--  <profile>
       <id>java11</id>
       <activation>

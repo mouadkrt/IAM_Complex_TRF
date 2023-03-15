@@ -39,6 +39,10 @@ public class Application extends RouteBuilder {
             //.to("netty4-http:http:130.24.31.210:8090")
         // Transformaing the backend reply
             //.to("Receipt_Transfer_Transformation_Response.Xquery")
+            .log(LoggingLevel.INFO, "MUIS toD : ${headers." + Exchange.HTTP_SCHEME + "}://"
+                                    + "${headers." + Exchange.HTTP_HOST + "}:"
+                                    + "${headers." + Exchange.HTTP_PORT + "}"
+                                    + "${headers." + Exchange.HTTP_PATH + "}")
             .toD("netty4-http:"
                 + "${headers." + Exchange.HTTP_SCHEME + "}://"
                 + "${headers." + Exchange.HTTP_HOST + "}:"

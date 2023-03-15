@@ -3,13 +3,11 @@ package ma.munisys;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 //import org.springframework.context.annotation.ImportResource;
@@ -28,15 +26,7 @@ public class Application extends RouteBuilder {
     @Override
     public void configure() {
 
-        final RouteDefinition from;
-
-        if (Files.exists(keystorePath())) {
-            from = from("netty-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/tls/keystore.jks&passphrase=changeit&trustStoreFile=/tls/keystore.jks");
-        } else {
-            from = from("netty-http:proxy://0.0.0.0:8086");
-        }
-
-        from("netty4-http:proxy://0.0.0.0:8086")
+        from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
             .routeId("muis_route1")
             .multicast(new transformRequest())
             .aggregationStrategyMethodAllowNull()
@@ -80,9 +70,6 @@ public class Application extends RouteBuilder {
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");
     }
 
-    Path keystorePath() {
-        return Path.of("/tls", "keystore.jks");
-    }
 }
 
 class transformRequest implements AggregationStrategy  {

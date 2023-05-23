@@ -3,7 +3,9 @@ package ma.munisys;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.nio.file.Path;
+import java.util.UUID;
+
+//import java.nio.file.Path;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
@@ -28,10 +30,14 @@ public class Application extends RouteBuilder {
 
         from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
             .routeId("muis_route1")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START -----------------------")
+            .log(LoggingLevel.INFO, "Initial received body : \n${body}")
+            .setHeader("X-Request-ID", constant(UUID.randomUUID()))
             .multicast(new transformRequest())
             .aggregationStrategyMethodAllowNull()
             .parallelProcessing()
             .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF END -----------------------")
         .end()
         // Uncomment the two following line to let this fuse app proxy the request to some backend
         // To be commented if this fuse app is to be used as a camel-proxy policy to let 3scale use it as a helper to transformer the request before handling it to the backend
@@ -49,9 +55,10 @@ public class Application extends RouteBuilder {
                 + "${headers." + Exchange.HTTP_PORT + "}"
                 + "${headers." + Exchange.HTTP_PATH + "}")
             .convertBodyTo(String.class)
-            .log(LoggingLevel.INFO, "Backend response in.headers: \n${in.headers}")
-            .log(LoggingLevel.INFO, "Backend response body: \n${body}")
-            .to("xquery:file:/Transform/Response.Xquery");
+            .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers}")
+            .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body}")
+            .to("xquery:file:/Transform/Response.Xquery")
+            .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body}");
             //.to("xquery:Response.Xquery");
         
                 from("direct:muis_trans_req_header")
@@ -99,9 +106,7 @@ class transformRequest implements AggregationStrategy  {
                                 "<soap:Body xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
                                 newBody +
                                 "</soap:Body>" +
-                            "</soapenv:Envelope>";
-                            
-        
+                            "</soapenv:Envelope>";        
 
         newExchange.getIn().setBody(mergedStr);
 

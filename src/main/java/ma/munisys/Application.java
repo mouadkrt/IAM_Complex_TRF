@@ -29,15 +29,16 @@ public class Application extends RouteBuilder {
     public void configure() {
 
         from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
+        //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START -----------------------")
-            .log(LoggingLevel.INFO, "Initial received body : \n${body}")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START -----------------------\n")
             .setHeader("X-Request-ID", constant(UUID.randomUUID()))
+            .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
+            .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
             .multicast(new transformRequest())
             .aggregationStrategyMethodAllowNull()
             .parallelProcessing()
             .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF END -----------------------")
         .end()
         // Uncomment the two following line to let this fuse app proxy the request to some backend
         // To be commented if this fuse app is to be used as a camel-proxy policy to let 3scale use it as a helper to transformer the request before handling it to the backend
@@ -48,34 +49,34 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "MUIS toD : ${headers." + Exchange.HTTP_SCHEME + "}://"
                                     + "${headers." + Exchange.HTTP_HOST + "}:"
                                     + "${headers." + Exchange.HTTP_PORT + "}"
-                                    + "${headers." + Exchange.HTTP_PATH + "}")
+                                    + "${headers." + Exchange.HTTP_PATH + "} \n")
             .toD("netty4-http:"
                 + "${headers." + Exchange.HTTP_SCHEME + "}://"
                 + "${headers." + Exchange.HTTP_HOST + "}:"
                 + "${headers." + Exchange.HTTP_PORT + "}"
                 + "${headers." + Exchange.HTTP_PATH + "}")
             .convertBodyTo(String.class)
-            .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers}")
-            .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body}")
+            .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers} \n")
+            .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body} \n")
             .to("xquery:file:/Transform/Response.Xquery")
-            .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body}");
-            //.to("xquery:Response.Xquery");
+            //.to("xquery:Response.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
+            .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body} \n");
         
                 from("direct:muis_trans_req_header")
                     .routeId("muis_route1.1")
-                    .log("muis_route1.1 is being invoked ...")
+                    .log("muis_route1.1 is being invoked ...\n")
                     .convertBodyTo(String.class)
                     //.delayer(5000)
                     .to("xquery:file:/Transform/Header.Xquery")
-                    //.to("xquery:Header.Xquery")
+                    //.to("xquery:Header.Xquery") // Enable this for local dev troubleshooting, and disable the above line
                 .end();
 
                 from("direct:muis_trans_req_body")
                     .routeId("muis_route1.2")
-                    .log("muis_route1.2 is being invoked ...")
+                    .log("muis_route1.2 is being invoked ...\n")
                     .convertBodyTo(String.class)
                     .to("xquery:file:/Transform/Request.Xquery")
-                    //.to("xquery:Request.Xquery")
+                    //.to("xquery:Request.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
                 .end();
 
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");
@@ -94,10 +95,10 @@ class transformRequest implements AggregationStrategy  {
         }
  
         String oldBody = oldExchange.getIn().getBody(String.class);
-        LOGGER.info("Inside aggregator oldExchange : " + oldBody);
+        LOGGER.info("Inside aggregator oldExchange : " + oldBody + "\n");
 
         String newBody = newExchange.getIn().getBody(String.class);
-        LOGGER.info("Inside aggregator newExchange : " + newBody);
+        LOGGER.info("Inside aggregator newExchange : " + newBody + "\n");
         
         String mergedStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
                                 "<soapenv:Header>" +
@@ -110,7 +111,7 @@ class transformRequest implements AggregationStrategy  {
 
         newExchange.getIn().setBody(mergedStr);
 
-        LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody());        
+        LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody() + "\n");        
         return newExchange;
     }
 

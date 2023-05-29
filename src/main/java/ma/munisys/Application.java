@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.Message;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 
@@ -59,6 +60,7 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body} \n")
             .to("xquery:file:/Transform/Response.Xquery")
+            .process(Application::addSoapEnvelope)
             //.to("xquery:Response.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
             .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body} \n");
         
@@ -82,6 +84,12 @@ public class Application extends RouteBuilder {
        //.transform().xquery("Receipt_Transfer_Header.Xquery", "urn:Ariba:Buyer:vsap");
     }
 
+    public static void addSoapEnvelope(Exchange exchange) {
+        final Message message = exchange.getIn();
+        String body = message.getBody(String.class);
+        String newBody = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"> <SOAP-ENV:Body xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + body + "</SOAP-ENV:Body> </soapenv:Envelope>";
+        message.setBody(newBody);
+    }
 }
 
 class transformRequest implements AggregationStrategy  {

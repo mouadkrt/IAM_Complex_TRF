@@ -9,15 +9,6 @@ src/main/resources/Receipt_Transfer_Transformation_Response.Xquery
 src/main/resources/Header.Xquery
 src/main/resources/Request.Xquery
 src/main/resources/Response.Xquery
-target/classes/application.properties
-target/classes/logback.xml
-target/classes/ma/munisys/Application.class
-target/classes/ma/munisys/transformRequest.class
-target/classes/spring/camel-context.xml
-target/maven-archiver/pom.properties
-target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
-target/Muis-Fuse-xQuery-transformation-1.0.0.jar.original
-target/classes/META-INF/MANIFEST.MF
-target/Muis-Fuse-xQuery-transformation-1.0.0.jar
+target/*
 .gitignore
+target/Muis-Fuse-xQuery-transformation-1.0.0.jar

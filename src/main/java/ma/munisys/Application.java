@@ -32,7 +32,7 @@ public class Application extends RouteBuilder {
         from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START -----------------------\n")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.14-prod -----------------------\n")
             .setHeader("X-Request-ID", constant(UUID.randomUUID()))
             .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
@@ -120,6 +120,7 @@ class transformRequest implements AggregationStrategy  {
         newExchange.getIn().setBody(mergedStr);
 
         LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody() + "\n");        
+        LOGGER.info("Inside aggregator merged Exchange.HTTP_RESPONSE_CODE : " + Exchange.HTTP_RESPONSE_CODE + "\n");
         return newExchange;
     }
 

@@ -12,3 +12,5 @@ src/main/resources/Response.Xquery
 target/*
 .gitignore
 target/Muis-Fuse-xQuery-transformation-1.0.0.jar
+certs/cacerts_openjdk-11_with_ca_okd
+certs

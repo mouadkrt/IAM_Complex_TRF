@@ -32,7 +32,7 @@ public class Application extends RouteBuilder {
         from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.14-prod -----------------------\n")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.22 -----------------------\n")
             .setHeader("X-Request-ID", constant(UUID.randomUUID()))
             .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
@@ -50,12 +50,18 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "MUIS toD : ${headers." + Exchange.HTTP_SCHEME + "}://"
                                     + "${headers." + Exchange.HTTP_HOST + "}:"
                                     + "${headers." + Exchange.HTTP_PORT + "}"
-                                    + "${headers." + Exchange.HTTP_PATH + "} \n")
+                                    + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout=60000&requestTimeout=60000 \n")
             .toD("netty4-http:"
                 + "${headers." + Exchange.HTTP_SCHEME + "}://"
                 + "${headers." + Exchange.HTTP_HOST + "}:"
                 + "${headers." + Exchange.HTTP_PORT + "}"
-                + "${headers." + Exchange.HTTP_PATH + "}")
+                + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout=60000&requestTimeout=60000")
+                // connectTimeout (producer) :   Time to wait for a socket connection to be available. Value is in milliseconds.
+                // requestTimeout (producer) : Allows to use a timeout for the Netty producer when calling a remote server. 
+                //                            By default no timeout is in use. The value is in milliseconds, so eg 30000 is 30 seconds. 
+                //                            The requestTimeout is using Netty’s ReadTimeoutHandler to trigger the timeout.
+                // 
+
             .convertBodyTo(String.class)
             .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body} \n")

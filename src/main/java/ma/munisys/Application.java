@@ -24,6 +24,7 @@ public class Application extends RouteBuilder {
 
 
     static String REQUEST_TIMEMOUT = System.getenv().getOrDefault("REQUEST_TIMEMOUT", "3600s");
+    static String DELAY_RESPONSE = System.getenv().getOrDefault("DELAY_RESPONSE", "10000");
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -31,7 +32,9 @@ public class Application extends RouteBuilder {
     @Override
     public void configure() {
 
-        from("netty4-http:proxy://0.0.0.0:8443?ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
+        //from("netty4-http:proxy://0.0.0.0:8443?sync=true&keepAlive=false&disconnect=false&reuseChannel=true&backlog=1000&ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
+        from("netty4-http:proxy://0.0.0.0:8443?backlog=1000&ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
+        //from("netty4-http:proxy://0.0.0.0:8081?backlog=1000")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
             .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.27 -----------------------\n")
@@ -68,7 +71,7 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body} \n")
             .to("xquery:file:/Transform/Response.Xquery")
-            .delay(30000)
+            .delay(Integer.parseInt(DELAY_RESPONSE))
             .process(Application::addSoapEnvelope)
             //.to("xquery:Response.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
             .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body} \n");

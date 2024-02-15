@@ -23,8 +23,10 @@ import org.slf4j.LoggerFactory;
 public class Application extends RouteBuilder {
 
 
-    static String REQUEST_TIMEMOUT = System.getenv().getOrDefault("REQUEST_TIMEMOUT", "3600s");
-    static String DELAY_RESPONSE = System.getenv().getOrDefault("DELAY_RESPONSE", "10000");
+    static String REQUEST_TIMEMOUT = System.getenv().getOrDefault("REQUEST_TIMEMOUT", "3600000");
+    static String CONNECT_TIMEOUT = System.getenv().getOrDefault("CONNECT_TIMEOUT", "3600000");
+
+    
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -37,7 +39,7 @@ public class Application extends RouteBuilder {
         //from("netty4-http:proxy://0.0.0.0:8081?backlog=1000")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.27 -----------------------\n")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.28 -----------------------\n")
             .setHeader("X-Request-ID", constant(UUID.randomUUID()))
             .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
@@ -55,12 +57,12 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "MUIS toD : ${headers." + Exchange.HTTP_SCHEME + "}://"
                                     + "${headers." + Exchange.HTTP_HOST + "}:"
                                     + "${headers." + Exchange.HTTP_PORT + "}"
-                                    + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout=60000&requestTimeout="+REQUEST_TIMEMOUT+"\n")
+                                    + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEMOUT+"\n")
             .toD("netty4-http:"
                 + "${headers." + Exchange.HTTP_SCHEME + "}://"
                 + "${headers." + Exchange.HTTP_HOST + "}:"
                 + "${headers." + Exchange.HTTP_PORT + "}"
-                + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout=60000&requestTimeout="+REQUEST_TIMEMOUT)
+                + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEMOUT)
                 // connectTimeout (producer) :   Time to wait for a socket connection to be available. Value is in milliseconds.
                 // requestTimeout (producer) : Allows to use a timeout for the Netty producer when calling a remote server. 
                 //                            By default no timeout is in use. The value is in milliseconds, so eg 30000 is 30 seconds. 
@@ -71,7 +73,6 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "Backend response in.headers (before transformation) : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Backend response body (before transformation) : \n${body} \n")
             .to("xquery:file:/Transform/Response.Xquery")
-            .delay(Integer.parseInt(DELAY_RESPONSE))
             .process(Application::addSoapEnvelope)
             //.to("xquery:Response.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
             .log(LoggingLevel.INFO, "Backend response body (after transformation) : \n${body} \n");

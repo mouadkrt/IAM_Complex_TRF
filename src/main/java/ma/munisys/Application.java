@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class Application extends RouteBuilder {
 
 
-    static String REQUEST_TIMEMOUT = System.getenv().getOrDefault("REQUEST_TIMEMOUT", "3600000");
+    static String REQUEST_TIMEOUT = System.getenv().getOrDefault("REQUEST_TIMEOUT", "3600000");
     static String CONNECT_TIMEOUT = System.getenv().getOrDefault("CONNECT_TIMEOUT", "3600000");
 
     
@@ -57,12 +57,12 @@ public class Application extends RouteBuilder {
             .log(LoggingLevel.INFO, "MUIS toD : ${headers." + Exchange.HTTP_SCHEME + "}://"
                                     + "${headers." + Exchange.HTTP_HOST + "}:"
                                     + "${headers." + Exchange.HTTP_PORT + "}"
-                                    + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEMOUT+"\n")
+                                    + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEOUT+"\n")
             .toD("netty4-http:"
                 + "${headers." + Exchange.HTTP_SCHEME + "}://"
                 + "${headers." + Exchange.HTTP_HOST + "}:"
                 + "${headers." + Exchange.HTTP_PORT + "}"
-                + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEMOUT)
+                + "${headers." + Exchange.HTTP_PATH + "}?connectTimeout="+CONNECT_TIMEOUT+"&requestTimeout="+REQUEST_TIMEOUT)
                 // connectTimeout (producer) :   Time to wait for a socket connection to be available. Value is in milliseconds.
                 // requestTimeout (producer) : Allows to use a timeout for the Netty producer when calling a remote server. 
                 //                            By default no timeout is in use. The value is in milliseconds, so eg 30000 is 30 seconds. 

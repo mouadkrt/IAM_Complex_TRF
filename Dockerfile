@@ -18,9 +18,9 @@ ENTRYPOINT ["java","-jar","app.jar"]
 # mvn clean install
 
 # Start Docker deamon
-# docker build -t 3scale-trf:iam_1.27 .
+# docker build -t 3scale-trf:iam_1.28 .
 # Tag it and push to quay
-# docker tag 3scale-trf:iam_1.27 quay.io/msentissi/3scale-trf:iam_1.27
-# docker push quay.io/msentissi/3scale-trf:iam_1.27
+# docker tag 3scale-trf:iam_1.28 quay.io/msentissi/3scale-trf:iam_1.28
+# docker push quay.io/msentissi/3scale-trf:iam_1.28
 # OR tag it and push to dockerhub
 # docker push msentissi/3scale-trf:1.5

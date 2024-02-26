@@ -2,8 +2,9 @@ FROM registry.redhat.io/ubi8/openjdk-11:1.14-12
 WORKDIR /opt/app
 ARG JAR_FILE=target/Muis-Fuse-xQuery-transformation-1.0.0.jar
 COPY ${JAR_FILE} app.jar
-COPY keystore_iam.jks /
-COPY openshift_iam_prod.cer /tmp
+# keystore_rec_iam.jks can be used safely on prod, since not exposed
+COPY certs/certs_rec/keystore_rec_iam.jks /
+COPY certs/certs_prod/openshift_iam_prod.cer /tmp
 #COPY openshift_iam_rec.cer /tmp
 #COPY soatest.cer /tmp
 USER root

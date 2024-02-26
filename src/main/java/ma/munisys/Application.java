@@ -35,7 +35,7 @@ public class Application extends RouteBuilder {
     public void configure() {
 
         //from("netty4-http:proxy://0.0.0.0:8443?sync=true&keepAlive=false&disconnect=false&reuseChannel=true&backlog=1000&ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
-        from("netty4-http:proxy://0.0.0.0:8443?backlog=1000&ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
+        from("netty4-http:proxy://0.0.0.0:8443?backlog=1000&ssl=true&keyStoreFile=/keystore_rec_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_rec_iam.jks")
         //from("netty4-http:proxy://0.0.0.0:8081?backlog=1000")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")

@@ -19,12 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-//@ImportResource({"classpath:spring/camel-context.xml"})
 public class Application extends RouteBuilder {
 
 
     static String REQUEST_TIMEOUT = System.getenv().getOrDefault("REQUEST_TIMEOUT", "3600000");
-    static String CONNECT_TIMEOUT = System.getenv().getOrDefault("CONNECT_TIMEOUT", "3600000");
+    static String CONNECT_TIMEOUT = System.getenv().getOrDefault("CONNECT_TIMEOUT", "60000");
 
     
     public static void main(String[] args) {
@@ -35,19 +34,19 @@ public class Application extends RouteBuilder {
     public void configure() {
 
         //from("netty4-http:proxy://0.0.0.0:8443?sync=true&keepAlive=false&disconnect=false&reuseChannel=true&backlog=1000&ssl=true&keyStoreFile=/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_iam.jks")
-        from("netty4-http:proxy://0.0.0.0:8443?backlog=1000&ssl=true&keyStoreFile=/keystore_rec_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/keystore_rec_iam.jks")
+        from("netty4-http:proxy://0.0.0.0:8443?backlog=200&ssl=true&keyStoreFile=/certs/keystore_iam.jks&passphrase=123.pwdMunisys&trustStoreFile=/certs/keystore_iam.jks")
         //from("netty4-http:proxy://0.0.0.0:8081?backlog=1000")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.28 -----------------------\n")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.28-rec -----------------------\n")
             .setHeader("X-Request-ID", constant(UUID.randomUUID()))
             .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
             .multicast(new transformRequest())
-            .aggregationStrategyMethodAllowNull()
-            .parallelProcessing()
-            .to("direct:muis_trans_req_header","direct:muis_trans_req_body")
-        .end()
+				.aggregationStrategyMethodAllowNull()
+				.parallelProcessing()
+				.to("direct:muis_trans_req_header","direct:muis_trans_req_body")
+			.end()
         // Uncomment the two following line to let this fuse app proxy the request to some backend
         // To be commented if this fuse app is to be used as a camel-proxy policy to let 3scale use it as a helper to transformer the request before handling it to the backend
            //.setHeader("CamelHttpMethod", constant("POST"))
@@ -79,16 +78,15 @@ public class Application extends RouteBuilder {
         
                 from("direct:muis_trans_req_header")
                     .routeId("muis_route1.1")
-                    .log("muis_route1.1 is being invoked ...\n")
+                    .log("muis_route1.1 ('direct:muis_trans_req_header') is being invoked ...\n")
                     .convertBodyTo(String.class)
-                    //.delayer(5000)
                     .to("xquery:file:/Transform/Header.Xquery")
                     //.to("xquery:Header.Xquery") // Enable this for local dev troubleshooting, and disable the above line
                 .end();
 
                 from("direct:muis_trans_req_body")
-                    .routeId("muis_route1.2")
-                    .log("muis_route1.2 is being invoked ...\n")
+                    .routeId("muis_route 1.2")
+                    .log("muis_route 1.2 ('direct:muis_trans_req_body') is being invoked ...")
                     .convertBodyTo(String.class)
                     .to("xquery:file:/Transform/Request.Xquery")
                     //.to("xquery:Request.Xquery")  // Enable this for local dev troubleshooting, and disable the above line
@@ -128,11 +126,11 @@ class transformRequest implements AggregationStrategy  {
                                 "<soap:Body xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
                                 newBody +
                                 "</soap:Body>" +
-                            "</soapenv:Envelope>";        
+                            "</soapenv:Envelope>";
 
         newExchange.getIn().setBody(mergedStr);
 
-        LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody() + "\n");        
+        LOGGER.info("Inside aggregator merged Exchange : " + newExchange.getIn().getBody() + "\n");
         LOGGER.info("Inside aggregator merged Exchange.HTTP_RESPONSE_CODE : " + Exchange.HTTP_RESPONSE_CODE + "\n");
         return newExchange;
     }

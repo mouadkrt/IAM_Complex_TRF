@@ -38,7 +38,7 @@ public class Application extends RouteBuilder {
         //from("netty4-http:proxy://0.0.0.0:8081?backlog=1000")
         //from("netty4-http:proxy://0.0.0.0:8086") // Enable this for local dev troubleshooting, and disable the above line
             .routeId("muis_route1")
-            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.28.1-rec -----------------------\n")
+            .log(LoggingLevel.INFO, "-------------- IAM_Complex_TRF START version iam_1.29 -----------------------\n")
             .setHeader("X-Request-ID", simple(UUID.randomUUID().toString()))
             .log(LoggingLevel.INFO, "Initial received header : \n${in.headers} \n")
             .log(LoggingLevel.INFO, "Initial received body : \n${body} \n")
